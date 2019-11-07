@@ -1,0 +1,16 @@
+version: "3.7"
+services:
+  api:
+    image: maven:3-jdk-8
+    container_name: noescalapp-api
+    volumes:
+      - $PWD:/app
+    ports:
+      - "8082:8080"
+    working_dir: /app
+    command: mvn spring-boot:run
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
