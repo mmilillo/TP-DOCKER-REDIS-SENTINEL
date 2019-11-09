@@ -32,6 +32,9 @@ public class ResourceController {
         } catch (IllegalArgumentException exception) {
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND, String.format("Resource de id %d no encontrado", id), exception);
+        } catch (IllegalStateException loadProblemsException) {
+            throw new ResponseStatusException(
+                    HttpStatus.INTERNAL_SERVER_ERROR, "Mucha carga en el sistema", loadProblemsException);
         }
     }
 

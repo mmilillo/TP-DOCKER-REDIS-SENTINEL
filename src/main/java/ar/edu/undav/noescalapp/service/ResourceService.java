@@ -1,12 +1,15 @@
 package ar.edu.undav.noescalapp.service;
 
 import ar.edu.undav.noescalapp.domain.Resource;
+import com.martensigwart.fakeload.*;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class ResourceService {
@@ -47,10 +50,28 @@ public class ResourceService {
     private void work(int hardness) {
         Long random =  Math.round(Math.random() * hardness);
         try {
-            Thread.sleep(random * 1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+            FakeLoad fakeload = FakeLoads.create()
+                    .lasting(random, TimeUnit.SECONDS)
+                    .withCpu(5)
+                    .withMemory(1, MemoryUnit.MB);
+            FakeLoadExecutor executor = NoEscalappFakeLoadExecutor.newNoEscalappFakeExecutor();
+            executor.execute(fakeload);
+        } catch (Exception exception) {
+
+            try {
+                System.out.println("No podemos fakear más carga. Solo dormimos.");
+                Thread.sleep(random);
+                throw exception;
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
+    }
+
+    @PostConstruct
+    public void initialize() {
+        this.save("resource0");
+        this.save("resource1");
     }
 
 }
