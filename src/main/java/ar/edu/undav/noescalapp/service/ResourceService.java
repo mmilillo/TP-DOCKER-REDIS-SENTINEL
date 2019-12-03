@@ -1,7 +1,12 @@
 package ar.edu.undav.noescalapp.service;
 
 import ar.edu.undav.noescalapp.domain.Resource;
-import com.martensigwart.fakeload.*;
+import ar.edu.undav.noescalapp.domain.ResourceRepository;
+import com.martensigwart.fakeload.FakeLoad;
+import com.martensigwart.fakeload.FakeLoadExecutor;
+import com.martensigwart.fakeload.FakeLoads;
+import com.martensigwart.fakeload.MemoryUnit;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -21,11 +26,18 @@ public class ResourceService {
     private static Integer lastId = 0;
     private static final Map<Integer, Resource> PERSISTENCE_MAP = new HashMap<>();
 
+    private ResourceRepository resourceRepository;
+
+    public ResourceService(ResourceRepository repository) {
+        this.resourceRepository = repository;
+    }
+
     public Resource save(String name) {
         Integer lastIdAndIncrement = this.getLastIdAndIncrement();
         Resource resource = new Resource(lastIdAndIncrement, name);
         this.work(HARDNESS_HARD);
-        PERSISTENCE_MAP.put(lastIdAndIncrement, resource);
+        this.resourceRepository.save(resource);
+        this.resourceRepository.delete(resource);
         return resource;
     }
 

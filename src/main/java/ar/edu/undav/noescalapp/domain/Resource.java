@@ -1,10 +1,17 @@
 package ar.edu.undav.noescalapp.domain;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.redis.core.RedisHash;
+
 import java.util.Objects;
 
+
+@RedisHash
 public class Resource {
 
     private String name;
+
+    @Id
     private Integer id;
 
     public Resource(Integer id, String name) {

@@ -8,7 +8,8 @@ import org.springframework.context.annotation.Import;
 @Configuration
 @Import({
         ResourceController.class,
-        ResourceService.class
+        ResourceService.class,
+        RedisConfig.class
 })
 public class SpringConfig {
 }
