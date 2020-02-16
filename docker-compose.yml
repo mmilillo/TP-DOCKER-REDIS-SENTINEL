@@ -11,7 +11,7 @@ services:
     networks:
       - noescalapp_app-tier
     volumes:
-      - /home/manuel/Documents/git_folder/TP-DOCKER-REDIS/no-escalapp:/app
+      - ${PWD}:/app
     ports:
       - "8082:8080"
     working_dir: /app
