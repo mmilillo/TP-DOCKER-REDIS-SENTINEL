@@ -1,10 +1,17 @@
-version: "3.7"
+version: "3.3"
+
+networks:
+  noescalapp_app-tier:
+    driver: bridge
+
 services:
   api:
     image: maven:3-jdk-8
     container_name: noescalapp-api
+    networks:
+      - noescalapp_app-tier
     volumes:
-      - $PWD:/app
+      - /home/manuel/Documents/git_folder/TP-DOCKER-REDIS/no-escalapp:/app
     ports:
       - "8082:8080"
     working_dir: /app
@@ -14,3 +21,12 @@ services:
         limits:
           cpus: '0.5'
           memory: 512M
+  redis:
+    image: 'redis:latest'
+    container_name: redisDB
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+    ports:
+      - "6379:6379"
+    networks:
+      - noescalapp_app-tier

@@ -10,10 +10,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -37,17 +34,18 @@ public class ResourceService {
         Resource resource = new Resource(lastIdAndIncrement, name);
         this.work(HARDNESS_HARD);
         this.resourceRepository.save(resource);
-        this.resourceRepository.delete(resource);
+        //this.resourceRepository.delete(resource);
         return resource;
     }
 
     public Resource getResource(Integer id) {
         this.work(HARDNESS_EASY);
-        Resource resource = PERSISTENCE_MAP.get(id);
+        //Resource resource = PERSISTENCE_MAP.get(id);
+        Optional<Resource> resource = this.resourceRepository.findById(id);
         if (resource == null) {
             throw new IllegalArgumentException("Recurso no existente");
         }
-        return resource;
+        return resource.get();
     }
 
     public List<Resource> getResources() {
