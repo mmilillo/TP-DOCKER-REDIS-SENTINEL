@@ -1,4 +1,5 @@
-version: "3.3"
+#version: "3.3"
+version: '3.7'
 
 networks:
   noescalapp_app-tier:
@@ -21,12 +22,45 @@ services:
         limits:
           cpus: '0.5'
           memory: 512M
-  redis:
+  redis-master:
     image: 'redis:latest'
-    container_name: redisDB
+    container_name: redisDB-master
+    networks:
+      - noescalapp_app-tier
     environment:
       - ALLOW_EMPTY_PASSWORD=yes
     ports:
       - "6379:6379"
+    working_dir: /redis
+    volumes:
+      - ./redis-master-config:/redis
+
+  redis-slave-1:
+    image: 'redis:latest'
+    container_name: redisDB-slave-1
     networks:
       - noescalapp_app-tier
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+    ports:
+      - "6380:6380"
+    working_dir: /redis
+    volumes:
+      - ./redis-slave-1-config:/redis
+    command: redis-server --port 6380 --replicaof redis-master 6379
+      #- redis-server --slaveof redis-master 26379 
+      #- redis-server /redis/sentinel.conf --sentinel
+    
+  redis-slave-2:
+    image: 'redis:latest'
+    container_name: redisDB-slave-2
+    networks:
+      - noescalapp_app-tier
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+    ports:
+      - "6381:6381"
+    working_dir: /redis
+    volumes:
+      - ./redis-slave-2-config:/redis
+    command: redis-server --port 6381 --replicaof redis-master 6379
