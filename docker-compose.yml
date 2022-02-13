@@ -12,16 +12,15 @@ networks:
 
 services:
   api:
+    build: .
     image: maven:3-jdk-8
-    container_name: noescalapp-api
+    container_name: no-escala-app
     networks:
       noescalapp-app-tier:
         ipv4_address: 172.20.0.2
-    volumes:
-      - ${PWD}:/app
     ports:
       - "8082:8080"
-    working_dir: /app
+    working_dir: /home/app
     command: mvn spring-boot:run
     deploy:
       resources:
