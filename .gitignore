@@ -28,3 +28,8 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### local data ###
+redis-master-config/*.rdb
+redis-slave-1-config/*.rdb
+redis-slave-2-config/*.rdb
