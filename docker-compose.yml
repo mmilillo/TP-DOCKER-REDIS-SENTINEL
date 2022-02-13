@@ -2,15 +2,21 @@
 version: '3.7'
 
 networks:
-  noescalapp_app-tier:
+  noescalapp-app-tier:
     driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/24
+    
+    
 
 services:
   api:
     image: maven:3-jdk-8
     container_name: noescalapp-api
     networks:
-      - noescalapp_app-tier
+      noescalapp-app-tier:
+        ipv4_address: 172.20.0.2
     volumes:
       - ${PWD}:/app
     ports:
@@ -22,11 +28,15 @@ services:
         limits:
           cpus: '0.5'
           memory: 512M
+          
   redis-master:
     image: 'redis:latest'
     container_name: redisDB-master
+#    networks:
+#      - noescalapp_app-tier
     networks:
-      - noescalapp_app-tier
+      noescalapp-app-tier:
+        ipv4_address: 172.20.0.3
     environment:
       - ALLOW_EMPTY_PASSWORD=yes
     ports:
@@ -39,7 +49,8 @@ services:
     image: 'redis:latest'
     container_name: redisDB-slave-1
     networks:
-      - noescalapp_app-tier
+      noescalapp-app-tier:
+        ipv4_address: 172.20.0.4
     environment:
       - ALLOW_EMPTY_PASSWORD=yes
     ports:
@@ -55,7 +66,8 @@ services:
     image: 'redis:latest'
     container_name: redisDB-slave-2
     networks:
-      - noescalapp_app-tier
+      noescalapp-app-tier:
+        ipv4_address: 172.20.0.5
     environment:
       - ALLOW_EMPTY_PASSWORD=yes
     ports:
@@ -64,3 +76,48 @@ services:
     volumes:
       - ./redis-slave-2-config:/redis
     command: redis-server --port 6381 --replicaof redis-master 6379
+
+  sentinel-1:
+    image: 'redis:latest'
+    container_name: redis-sentinel-1
+    networks:
+      noescalapp-app-tier:
+        ipv4_address: 172.20.0.6
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+    ports:
+      - "26379:26379"
+    working_dir: /redis
+    volumes:
+      - ./redis-sentinel-1-config:/redis
+    command: redis-server /redis/sentinel.conf --sentinel
+
+  sentinel-2:
+    image: 'redis:latest'
+    container_name: redis-sentinel-2
+    networks:
+      noescalapp-app-tier:
+        ipv4_address: 172.20.0.7
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+    ports:
+      - "26380:26380"
+    working_dir: /redis
+    volumes:
+      - ./redis-sentinel-2-config:/redis
+    command: redis-server /redis/sentinel.conf --sentinel 
+
+  sentinel-3:
+    image: 'redis:latest'
+    container_name: redis-sentinel-3
+    networks:
+      noescalapp-app-tier:
+        ipv4_address: 172.20.0.8
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+    ports:
+      - "26381:26381"
+    working_dir: /redis
+    volumes:
+      - ./redis-sentinel-3-config:/redis
+    command: redis-server /redis/sentinel.conf --sentinel 
