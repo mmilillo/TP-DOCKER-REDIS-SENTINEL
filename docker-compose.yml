@@ -11,6 +11,20 @@ networks:
     
 
 services:
+
+  load-balancer:
+    image: nginx:alpine
+    container_name: nginx-load-balancer
+    networks:
+      noescalapp-app-tier:
+        ipv4_address: 172.20.0.2
+    ports:
+      - "8081:8081"
+    volumes:
+      - ./nginx:/etc/nginx/
+
+
+
   api-1:
     build: .
     image: maven:3-jdk-8
