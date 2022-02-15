@@ -1,4 +1,4 @@
-#version: "3.3"
+
 version: '3.7'
 
 networks:
@@ -8,8 +8,6 @@ networks:
       config:
         - subnet: 172.20.0.0/24
     
-    
-
 services:
 
   load-balancer:
@@ -22,8 +20,6 @@ services:
       - "8081:8081"
     volumes:
       - ./nginx:/etc/nginx/
-
-
 
   api-1:
     build: .
@@ -43,7 +39,6 @@ services:
           memory: 512M
 
   api-2:
-    #build: .
     image: no-escala-app-compose
     container_name: no-escala-app-2
     networks:
@@ -60,7 +55,6 @@ services:
           memory: 512M
 
   api-3:
-    #build: .
     image: no-escala-app-compose
     container_name: no-escala-app-3
     networks:
@@ -79,8 +73,6 @@ services:
   redis-master:
     image: 'redis:latest'
     container_name: redisDB-master
-#    networks:
-#      - noescalapp_app-tier
     networks:
       noescalapp-app-tier:
         ipv4_address: 172.20.0.3
@@ -106,8 +98,6 @@ services:
     volumes:
       - ./redis-slave-1-config:/redis
     command: redis-server --port 6380 --replicaof redis-master 6379
-      #- redis-server --slaveof redis-master 26379 
-      #- redis-server /redis/sentinel.conf --sentinel
     
   redis-slave-2:
     image: 'redis:latest'

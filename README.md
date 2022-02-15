@@ -40,7 +40,20 @@ A continuación los resultados de las pruebas
  
 ![Resultado-pruebas](/documentacion/resultado-prueba-estres.png "resultado pruebas de estrés")
  
+ ## Y como lo usamos?
+
+
+ En el `docker-compose.yml` puede verse la ip de cada contenedor pero, en resumen, basta con enviar los request al load balancer:
+
+ Para crear un recurso:
+
+    curl -X POST http://localhost:8081/only-resource/un-recurso  
+
+ O bien para recuperar un recurso ya creado:
+
+    curl -X GET http://localhost:8081/only-resource/1959516580
  
+
 ## Es tolerante a fallas?
  
 Si, lo es, para probarlo basta con detener el contenedor en el cual se ejecuta la instancia master de la base de datos.
