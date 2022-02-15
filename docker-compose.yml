@@ -27,7 +27,7 @@ services:
 
   api-1:
     build: .
-    image: maven:3-jdk-8
+    image: no-escala-app-compose
     container_name: no-escala-app-1
     networks:
       noescalapp-app-tier:
@@ -43,8 +43,8 @@ services:
           memory: 512M
 
   api-2:
-    build: .
-    image: maven:3-jdk-8
+    #build: .
+    image: no-escala-app-compose
     container_name: no-escala-app-2
     networks:
       noescalapp-app-tier:
@@ -60,8 +60,8 @@ services:
           memory: 512M
 
   api-3:
-    build: .
-    image: maven:3-jdk-8
+    #build: .
+    image: no-escala-app-compose
     container_name: no-escala-app-3
     networks:
       noescalapp-app-tier:

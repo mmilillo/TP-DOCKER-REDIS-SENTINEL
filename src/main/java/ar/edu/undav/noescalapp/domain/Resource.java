@@ -1,6 +1,7 @@
 package ar.edu.undav.noescalapp.domain;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.PersistenceConstructor;
 import org.springframework.data.redis.core.RedisHash;
 
 import java.util.Objects;
@@ -14,6 +15,13 @@ public class Resource {
     @Id
     private Integer id;
 
+    public Resource() {
+    }
+
+    /*public Resource(String name) {
+        this.name = name;
+    }*/
+
     public Resource(Integer id, String name) {
         this.id = id;
         this.name = name;
@@ -23,8 +31,16 @@ public class Resource {
         return id;
     }
 
+    public void setId(Integer id){
+        this.id = id;
+    }
+
     public String getName() {
         return name;
+    }
+
+    public void setName(String name){
+        this.name = name;
     }
 
     @Override

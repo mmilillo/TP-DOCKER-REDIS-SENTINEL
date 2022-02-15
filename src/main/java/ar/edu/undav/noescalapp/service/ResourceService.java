@@ -30,10 +30,11 @@ public class ResourceService {
     }
 
     public Resource save(String name) {
-        Integer lastIdAndIncrement = this.getLastIdAndIncrement();
-        Resource resource = new Resource(lastIdAndIncrement, name);
+        //Integer lastIdAndIncrement = this.getLastIdAndIncrement();
+        Resource resource = new Resource();
+        resource.setName(name);
         this.work(HARDNESS_HARD);
-        this.resourceRepository.save(resource);
+        resource = this.resourceRepository.save(resource);
         //this.resourceRepository.delete(resource);
         return resource;
     }
@@ -42,7 +43,7 @@ public class ResourceService {
         this.work(HARDNESS_EASY);
         //Resource resource = PERSISTENCE_MAP.get(id);
         Optional<Resource> resource = this.resourceRepository.findById(id);
-        if (resource == null) {
+        if (!resource.isPresent()) {
             throw new IllegalArgumentException("Recurso no existente");
         }
         return resource.get();
@@ -50,7 +51,10 @@ public class ResourceService {
 
     public List<Resource> getResources() {
         this.work(HARDNESS_MEDIUM);
-        return new ArrayList<>(PERSISTENCE_MAP.values());
+        //return new ArrayList<>(PERSISTENCE_MAP.values());
+        List<Resource> resources = new ArrayList<Resource>();
+        this.resourceRepository.findAll().forEach(resources::add);
+        return resources;
     }
 
     private synchronized Integer getLastIdAndIncrement() {

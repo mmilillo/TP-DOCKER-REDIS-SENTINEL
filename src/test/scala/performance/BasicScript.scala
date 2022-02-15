@@ -9,7 +9,7 @@ import scala.concurrent.duration._
 class BasicScript extends Simulation {
 
     val httpProtocol = http
-      .baseUrl("http://localhost:8082/only-resource") // Here is the root for all relative URLs
+      .baseUrl("http://localhost:8081/only-resource") // Here is the root for all relative URLs
       .acceptHeader("text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8") // Here are the common headers
       .acceptEncodingHeader("gzip, deflate")
       .acceptLanguageHeader("en-US,en;q=0.5")
