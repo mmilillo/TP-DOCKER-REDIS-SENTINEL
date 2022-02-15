@@ -3,10 +3,6 @@ package ar.edu.undav.noescalapp;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.eq;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -37,15 +33,6 @@ class NoescalappApplicationTests {
 	void contextLoads() {
 	}
 
-
-	/*public Resource save(String name) {
-        Integer lastIdAndIncrement = 1;
-        Resource resource = new Resource(lastIdAndIncrement, name);
-        //this.work(HARDNESS_HARD);
-        this.resourceRepository.save(resource);
-        return resource;
-    }*/
-
 	@Test
 	// Se mockea el repository para poder probar el servicio al momento de guardar una entidad nueva.
 	public void saveEntity() {
@@ -61,10 +48,7 @@ class NoescalappApplicationTests {
 
 
         Assertions.assertNotNull(recursoCreado);
-
-		Assertions.assertEquals("nuevoRecurso", recursoCreado.getName()
-		, "El nombre generado es incorrecto");
-
+		Assertions.assertEquals("nuevoRecurso", recursoCreado.getName(), "El nombre generado es incorrecto");
 		Assertions.assertEquals(123456, recursoCreado.getId(), "El id generado es incorrecto");
     }
 
@@ -76,7 +60,6 @@ class NoescalappApplicationTests {
         int id = 123456;
 		int idNoExistente = 654321;
         Resource recursoExistente = new Resource(id, resourceName);
-		Resource recursoNoExistente = null;
 
 		// consulta de un recurso existente
 		when(resourceRepository.findById(id)).thenReturn(Optional.of(recursoExistente));
@@ -88,10 +71,8 @@ class NoescalappApplicationTests {
 
 
         Assertions.assertNotNull(recursoRecuperado);
-		Assertions.assertEquals("unRecurso", recursoRecuperado.getName()
-		, "El nombre recuperado es incorrecto");
-		Assertions.assertEquals(123456, recursoRecuperado.getId()
-		, "El id recuperado es incorrecto");
+		Assertions.assertEquals("unRecurso", recursoRecuperado.getName(), "El nombre recuperado es incorrecto");
+		Assertions.assertEquals(123456, recursoRecuperado.getId(), "El id recuperado es incorrecto");
 
 
 		Exception exception = assertThrows(IllegalArgumentException.class, () -> {
@@ -120,7 +101,6 @@ class NoescalappApplicationTests {
 		// consulta a todos los recursos
 		when(resourceRepository.findAll()).thenReturn(resources);
 	
-		//List<Resource> recursosRecuperados = new ArrayList<Resource>();
         List<Resource> recursosRecuperados = resourceService.getResources();
 
         Assertions.assertNotNull(recursosRecuperados);
